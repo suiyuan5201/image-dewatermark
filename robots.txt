@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://image-dewatermark.netlify.app/sitemap.xml
+Sitemap: https://rainbow-mooncake-af9fc4.netlify.app/sitemap.xml
