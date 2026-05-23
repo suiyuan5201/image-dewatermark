@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>图片去水印 - 在线一键去除图片水印/文字/Logo | 免费工具</title>
+<meta name="description" content="免费在线图片去水印工具，一键去除图片上的水印、文字、Logo，支持智能涂抹修复，无需安装软件，手机电脑都能用。">
+<meta name="keywords" content="图片去水印,去水印,去除水印,图片水印去除,在线去水印,去文字,去Logo,图片修复,image watermark remover">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2030154790924322" crossorigin="anonymous"></script>
+<style>
+:root{--primary:#6366f1;--primary-dark:#4f46e5;--bg:#f8fafc;--text:#1e293b;--text-light:#64748b;--border:#e2e8f0;--card-bg:#fff;--shadow:0 2px 12px rgba(0,0,0,.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+.navbar{background:var(--card-bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:15px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.logo{font-weight:700;font-size:1.2em;color:var(--primary)}
+.hero{text-align:center;padding:50px 20px 35px;background:linear-gradient(135deg,#a1c4fd 0%,#c2e9fb 100%);color:var(--text);margin-bottom:30px}
+.hero h1{font-size:2.2em;margin-bottom:10px}
+.hero p{font-size:15px;color:var(--text-light);max-width:550px;margin:0 auto}
+.container{max-width:900px;margin:0 auto;padding:0 20px 50px}
+
+.card{background:var(--card-bg);border-radius:14px;padding:25px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:20px}
+.card h2{font-size:1.1em;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+
+/* 上传区 */
+.upload-area{border:2px dashed var(--border);border-radius:14px;padding:60px 30px;text-align:center;cursor:pointer;transition:all .2s;background:#f9fafb}
+.upload-area:hover{border-color:var(--primary);background:#f0f4ff}
+.upload-area .icon{font-size:48px;margin-bottom:12px}
+.upload-area p{color:var(--text-light);font-size:14px}
+
+/* 编辑器 */
+.editor{display:none}
+.editor.show{display:block}
+.editor-layout{display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:start}
+@media(max-width:800px){.editor-layout{grid-template-columns:1fr}}
+
+.canvas-container{position:relative;background:#f1f5f9;border-radius:12px;overflow:hidden;text-align:center;min-height:300px;display:flex;align-items:center;justify-content:center}
+.canvas-container canvas{max-width:100%;cursor:crosshair}
+
+.tool-panel{background:var(--card-bg);border-radius:12px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.tool-panel h3{font-size:14px;font-weight:700;margin-bottom:12px}
+.tool-section{margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #f3f4f6}
+.tool-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+
+.tool-btns{display:flex;flex-direction:column;gap:8px}
+.tool-btn{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:13px;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:8px}
+.tool-btn:hover,.tool-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.slider-group{margin-bottom:10px}
+.slider-group label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:#555}
+.slider-group label span{color:var(--primary);font-weight:600}
+.slider-group input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:#e5e7eb;border-radius:2px;outline:none}
+.slider-group input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--primary);border-radius:50%;cursor:pointer}
+
+.action-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.btn{padding:12px;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:all .2s;text-align:center;display:block;width:100%}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-secondary{background:#f3f4f6;color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:#e5e7eb}
+.btn-reset{background:#fee2e2;color:#991b1b}
+
+/* 付费弹窗 */
+.pay-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center}
+.pay-overlay.show{display:flex}
+.pay-modal{background:#fff;border-radius:16px;padding:30px 28px;max-width:420px;width:92%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative;animation:payIn .3s ease}
+@keyframes payIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.pay-modal .close-btn{position:absolute;top:12px;right:16px;font-size:22px;color:#aaa;cursor:pointer;background:none;border:none}
+.pay-modal .close-btn:hover{color:#333}
+.pay-modal h2{font-size:1.3em;margin-bottom:6px}
+.pay-modal .price-tag{font-size:2.2em;font-weight:800;color:#ef4444;margin:10px 0 4px}
+.pay-modal .price-tag small{font-size:.45em;color:#999;font-weight:400;text-decoration:line-through;margin-left:6px}
+.pay-modal .price-note{font-size:12px;color:var(--text-light);margin-bottom:14px}
+.pay-modal .benefits{display:flex;justify-content:center;gap:14px;margin:10px 0;font-size:11px;color:var(--text-light)}
+.pay-modal .benefits span{display:flex;align-items:center;gap:3px}
+.pay-modal .qr-area{background:#f9fafb;border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid #e2e8f0;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:flex-start}
+.pay-modal .qr-area>div{text-align:center}
+.pay-modal .qr-area img{width:140px;height:140px;border-radius:8px;object-fit:contain;border:1px solid #e2e8f0}
+.pay-modal .qr-area p{margin-top:4px;font-size:11px;font-weight:600}
+.pay-modal .contact-info{background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:10px;margin:10px 0;font-size:12px;color:#1e40af;text-align:left}
+.pay-modal .contact-info p{margin:3px 0}
+.pay-modal .code-input-row{display:flex;gap:8px;margin-bottom:10px}
+.pay-modal .code-input-row input{flex:1;padding:10px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;text-align:center;letter-spacing:2px}
+.pay-modal .code-input-row input:focus{border-color:var(--primary)}
+.pay-modal .code-input-row button{padding:10px 18px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;white-space:nowrap}
+.pay-modal .code-err{color:#ef4444;font-size:12px;margin:-4px 0 8px;display:none}
+.pay-modal .free-dl-btn{display:block;width:100%;padding:12px;background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb;border-radius:10px;font-size:13px;cursor:pointer;margin-top:4px}
+.pay-modal .free-dl-btn:hover{background:#e5e7eb;color:#374151}
+
+.ad-placeholder{background:#f9fafb;border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;color:var(--text-light);font-size:13px;margin:25px auto;max-width:728px}
+.footer{text-align:center;padding:30px;color:var(--text-light);font-size:13px;border-top:1px solid var(--border);margin-top:40px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 24px;border-radius:20px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* 教程 */
+.tutorial{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:15px}
+.tutorial-step{text-align:center;padding:20px 15px;background:#f9fafb;border-radius:12px}
+.tutorial-step .step-icon{font-size:2em;margin-bottom:8px}
+.tutorial-step .step-num{display:inline-block;width:24px;height:24px;background:var(--primary);color:#fff;border-radius:50%;font-size:12px;line-height:24px;margin-bottom:8px;font-weight:700}
+.tutorial-step h3{font-size:14px;margin-bottom:4px}
+.tutorial-step p{font-size:12px;color:var(--text-light)}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="logo">🧹 图片去水印</a>
+</nav>
+
+<div class="hero">
+  <h1>🧹 图片去水印工具</h1>
+  <p>智能涂抹去除图片上的水印、文字、Logo，简单好用</p>
+</div>
+
+<div class="container">
+  <!-- 上传区 -->
+  <div class="card" id="uploadCard">
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+      <div class="icon">📷</div>
+      <p><strong>点击选择图片</strong> 或拖拽图片到此处</p>
+      <p style="font-size:12px;margin-top:6px;color:#aaa">支持 JPG / PNG / WebP，建议小于10MB</p>
+      <input type="file" id="fileInput" accept="image/*" style="display:none">
+    </div>
+  </div>
+
+  <!-- 编辑器 -->
+  <div class="editor" id="editor">
+    <div class="editor-layout">
+      <div>
+        <div class="canvas-container">
+          <canvas id="mainCanvas"></canvas>
+        </div>
+        <p style="text-align:center;font-size:12px;color:var(--text-light);margin-top:8px">🖱️ 在水印位置涂抹标记，然后点击"去除水印"</p>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-section">
+          <h3>🔧 工具</h3>
+          <div class="tool-btns">
+            <button class="tool-btn active" id="brushBtn" onclick="setTool('brush')">🖌️ 涂抹画笔</button>
+            <button class="tool-btn" id="eraserBtn" onclick="setTool('eraser')">🧽 橡皮擦</button>
+          </div>
+        </div>
+        <div class="tool-section">
+          <h3>⚙️ 画笔设置</h3>
+          <div class="slider-group">
+            <label>画笔大小 <span id="brushSizeVal">20</span>px</label>
+            <input type="range" id="brushSize" min="5" max="80" value="20" oninput="document.getElementById('brushSizeVal').textContent=this.value">
+          </div>
+        </div>
+        <div class="tool-section">
+          <h3>📐 操作</h3>
+          <div class="action-btns">
+            <button class="btn btn-primary" onclick="removeWatermark()">✨ 去除水印</button>
+            <button class="btn btn-secondary" onclick="undoMask()">↩️ 撤销涂抹</button>
+            <button class="btn btn-reset" onclick="resetAll()">🔄 重新上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-placeholder">广告位 - Google AdSense</div>
+
+  <!-- 教程 -->
+  <div class="card">
+    <h2>📖 使用教程</h2>
+    <div class="tutorial">
+      <div class="tutorial-step">
+        <div class="step-num">1</div>
+        <div class="step-icon">📷</div>
+        <h3>上传图片</h3>
+        <p>选择需要去水印的图片</p>
+      </div>
+      <div class="tutorial-step">
+        <div class="step-num">2</div>
+        <div class="step-icon">🖌️</div>
+        <h3>涂抹水印</h3>
+        <p>用画笔涂抹覆盖水印区域</p>
+      </div>
+      <div class="tutorial-step">
+        <div class="step-num">3</div>
+        <div class="step-icon">✨</div>
+        <h3>一键去除</h3>
+        <p>点击"去除水印"自动修复</p>
+      </div>
+      <div class="tutorial-step">
+        <div class="step-num">4</div>
+        <div class="step-icon">⬇️</div>
+        <h3>下载保存</h3>
+        <p>下载处理后的高清图片</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-placeholder">广告位 - Google AdSense</div>
+</div>
+
+<footer class="footer">
+  图片去水印 © 2024 | 免费在线图片去水印工具<br>
+  <span style="font-size:11px;margin-top:5px;display:block;opacity:.7">仅供个人使用，请尊重原创版权</span>
+</footer>
+
+<!-- 付费弹窗 -->
+<div class="pay-overlay" id="payOverlay">
+  <div class="pay-modal">
+    <button class="close-btn" onclick="closePayModal()">&times;</button>
+    <h2>下载无水印高清结果</h2>
+    <div class="price-tag">¥2.9<small>原价¥6.9</small></div>
+    <p class="price-note">一次付费，永久使用，不限次数</p>
+    <div class="benefits">
+      <span>✅ 高清无损</span><span>✅ 无限次数</span><span>✅ 永久有效</span>
+    </div>
+    <div class="qr-area">
+      <div>
+        <img src="img/wechat-pay.jpg" alt="微信支付">
+        <p style="color:#07c160">💚 微信支付</p>
+      </div>
+      <div>
+        <img src="img/alipay.jpg" alt="支付宝支付">
+        <p style="color:#1677ff">💙 支付宝支付</p>
+      </div>
+    </div>
+    <div class="contact-info">
+      <p style="font-weight:700;margin-bottom:4px">📞 付款后联系方式（任选一种）：</p>
+      <p>💬 微信号：<strong style="user-select:all">suiyuan5201</strong>（推荐，回复快）</p>
+      <p>🐧 QQ号：<strong style="user-select:all">289419604</strong></p>
+      <p style="font-size:11px;color:#64748b;margin-top:4px">付款后发截图，立即发取件码，秒回！</p>
+    </div>
+    <div class="code-input-row">
+      <input type="text" id="unlockCode" placeholder="输入取件码" maxlength="10" onkeyup="if(event.key==='Enter')unlockDownload()">
+      <button onclick="unlockDownload()">解锁下载</button>
+    </div>
+    <p class="code-err" id="codeErr">❌ 取件码错误，请检查后重试</p>
+    <button class="free-dl-btn" onclick="downloadFree()">📥 免费下载（带水印预览版）</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const UNLOCK_CODES = ['DEWM29','VIP2024','CLEARIMG','QUSHUIYIN'];
+let img = null;
+let maskCanvas, maskCtx;
+let isDrawing = false;
+let currentTool = 'brush';
+let maskHistory = [];
+
+const mainCanvas = document.getElementById('mainCanvas');
+const mainCtx = mainCanvas.getContext('2d');
+
+// 上传图片
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  loadImage(file);
+});
+
+// 拖拽上传
+const uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor='var(--primary)'; });
+uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor=''; });
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.style.borderColor='';
+  if (e.dataTransfer.files[0]) loadImage(e.dataTransfer.files[0]);
+});
+
+function loadImage(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    img = new Image();
+    img.onload = function() {
+      // 限制画布大小
+      let w = img.width, h = img.height;
+      const maxSize = 800;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = h * maxSize / w; w = maxSize; }
+        else { w = w * maxSize / h; h = maxSize; }
+      }
+      mainCanvas.width = w;
+      mainCanvas.height = h;
+      mainCtx.drawImage(img, 0, 0, w, h);
+
+      // 创建遮罩画布
+      maskCanvas = document.createElement('canvas');
+      maskCanvas.width = w;
+      maskCanvas.height = h;
+      maskCtx = maskCanvas.getContext('2d');
+      maskHistory = [];
+
+      document.getElementById('uploadCard').style.display = 'none';
+      document.getElementById('editor').classList.add('show');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// 画笔绘制
+mainCanvas.addEventListener('mousedown', startDraw);
+mainCanvas.addEventListener('mousemove', draw);
+mainCanvas.addEventListener('mouseup', endDraw);
+mainCanvas.addEventListener('mouseleave', endDraw);
+mainCanvas.addEventListener('touchstart', e => { e.preventDefault(); startDraw(getTouchPos(e)); });
+mainCanvas.addEventListener('touchmove', e => { e.preventDefault(); draw(getTouchPos(e)); });
+mainCanvas.addEventListener('touchend', endDraw);
+
+function getTouchPos(e) {
+  const rect = mainCanvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  return {
+    offsetX: (touch.clientX - rect.left) * mainCanvas.width / rect.width,
+    offsetY: (touch.clientY - rect.top) * mainCanvas.height / rect.height
+  };
+}
+
+function startDraw(e) {
+  isDrawing = true;
+  // 保存当前遮罩状态用于撤销
+  maskHistory.push(maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height));
+  if (maskHistory.length > 20) maskHistory.shift();
+  draw(e);
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  const rect = mainCanvas.getBoundingClientRect();
+  const x = e.offsetX !== undefined ? e.offsetX * mainCanvas.width / rect.width : e.offsetX;
+  const y = e.offsetY !== undefined ? e.offsetY * mainCanvas.height / rect.height : e.offsetY;
+  const size = parseInt(document.getElementById('brushSize').value);
+
+  if (currentTool === 'brush') {
+    maskCtx.fillStyle = 'rgba(255,0,0,0.5)';
+    maskCtx.beginPath();
+    maskCtx.arc(x, y, size/2, 0, Math.PI*2);
+    maskCtx.fill();
+  } else {
+    maskCtx.clearRect(x-size/2, y-size/2, size, size);
+  }
+
+  // 重绘主画布
+  redrawCanvas();
+}
+
+function endDraw() { isDrawing = false; }
+
+function redrawCanvas() {
+  const w = mainCanvas.width, h = mainCanvas.height;
+  mainCtx.drawImage(img, 0, 0, w, h);
+  mainCtx.globalAlpha = 0.4;
+  mainCtx.drawImage(maskCanvas, 0, 0);
+  mainCtx.globalAlpha = 1;
+}
+
+function setTool(tool) {
+  currentTool = tool;
+  document.getElementById('brushBtn').classList.toggle('active', tool==='brush');
+  document.getElementById('eraserBtn').classList.toggle('active', tool==='eraser');
+}
+
+function undoMask() {
+  if (maskHistory.length > 0) {
+    maskCtx.putImageData(maskHistory.pop(), 0, 0);
+    redrawCanvas();
+    showToast('已撤销');
+  }
+}
+
+// ====== 去水印处理 ======
+function removeWatermark() {
+  if (!img) return;
+  showToast('正在处理中...');
+
+  setTimeout(() => {
+    const w = mainCanvas.width, h = mainCanvas.height;
+    // 获取遮罩数据
+    const maskData = maskCtx.getImageData(0, 0, w, h);
+    // 绘制原图
+    mainCtx.drawImage(img, 0, 0, w, h);
+    const imgData = mainCtx.getImageData(0, 0, w, h);
+
+    // 对遮罩区域进行修复（周边像素平均填充）
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const idx = (y * w + x) * 4;
+        if (maskData.data[idx] > 100) { // 被标记的区域
+          // 取周围非遮罩像素的平均值
+          let r=0, g=0, b=0, count=0;
+          const radius = 8;
+          for (let dy = -radius; dy <= radius; dy++) {
+            for (let dx = -radius; dx <= radius; dx++) {
+              const nx = x+dx, ny = y+dy;
+              if (nx<0||ny<0||nx>=w||ny>=h) continue;
+              const nIdx = (ny * w + nx) * 4;
+              if (maskData.data[nIdx] < 100) {
+                r += imgData.data[nIdx];
+                g += imgData.data[nIdx+1];
+                b += imgData.data[nIdx+2];
+                count++;
+              }
+            }
+          }
+          if (count > 0) {
+            imgData.data[idx] = r/count;
+            imgData.data[idx+1] = g/count;
+            imgData.data[idx+2] = b/count;
+          }
+        }
+      }
+    }
+
+    // 对修复区域做高斯模糊平滑
+    smoothRegion(imgData, maskData, w, h);
+
+    mainCtx.putImageData(imgData, 0, 0);
+    // 清除遮罩
+    maskCtx.clearRect(0, 0, w, h);
+    maskHistory = [];
+
+    showToast('处理完成！点击下载保存');
+    showPayModal();
+  }, 500);
+}
+
+function smoothRegion(imgData, maskData, w, h) {
+  const d = imgData.data;
+  const temp = new Uint8ClampedArray(d);
+  for (let pass = 0; pass < 3; pass++) {
+    for (let y = 1; y < h-1; y++) {
+      for (let x = 1; x < w-1; x++) {
+        const idx = (y*w+x)*4;
+        if (maskData.data[idx] > 100) {
+          for (let c = 0; c < 3; c++) {
+            d[idx+c] = (
+              temp[((y-1)*w+x)*4+c] + temp[((y+1)*w+x)*4+c] +
+              temp[(y*w+x-1)*4+c] + temp[(y*w+x+1)*4+c] +
+              temp[idx+c] * 2
+            ) / 6;
+          }
+        }
+      }
+    }
+    temp.set(d);
+  }
+}
+
+// ====== 付费模式 ======
+function isPaid() { return localStorage.getItem('dewm_paid') === '1'; }
+
+function showPayModal() {
+  if (isPaid()) { downloadClean(); return; }
+  document.getElementById('payOverlay').classList.add('show');
+  document.getElementById('codeErr').style.display = 'none';
+  document.getElementById('unlockCode').value = '';
+}
+
+function closePayModal() { document.getElementById('payOverlay').classList.remove('show'); }
+
+function unlockDownload() {
+  const code = document.getElementById('unlockCode').value.trim().toUpperCase();
+  if (UNLOCK_CODES.includes(code)) {
+    localStorage.setItem('dewm_paid', '1');
+    closePayModal();
+    downloadClean();
+  } else {
+    document.getElementById('codeErr').style.display = 'block';
+  }
+}
+
+function downloadClean() {
+  const link = document.createElement('a');
+  link.download = `去水印_${Date.now()}.png`;
+  link.href = mainCanvas.toDataURL('image/png');
+  link.click();
+  showToast('高清图片已保存！');
+}
+
+function downloadFree() {
+  closePayModal();
+  // 添加水印后下载
+  const c = document.createElement('canvas');
+  c.width = mainCanvas.width; c.height = mainCanvas.height;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(mainCanvas, 0, 0);
+  // 加水印
+  ctx.save();
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = '#999';
+  const fontSize = Math.max(14, Math.min(c.width, c.height) / 14);
+  ctx.font = `bold ${fontSize}px sans-serif`;
+  ctx.translate(c.width/2, c.height/2);
+  ctx.rotate(-30 * Math.PI / 180);
+  const text = '仅供预览 付费去水印';
+  for (let y = -c.height; y < c.height*2; y += fontSize*3.5) {
+    for (let x = -c.width; x < c.width*2; x += fontSize*10) {
+      ctx.fillText(text, x-c.width, y-c.height);
+    }
+  }
+  ctx.restore();
+  const link = document.createElement('a');
+  link.download = `去水印_预览_${Date.now()}.png`;
+  link.href = c.toDataURL('image/png');
+  link.click();
+  showToast('预览版已保存（带水印）');
+}
+
+function resetAll() {
+  img = null;
+  document.getElementById('editor').classList.remove('show');
+  document.getElementById('uploadCard').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>
